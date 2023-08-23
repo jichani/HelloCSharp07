@@ -43,11 +43,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.isbnDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.publisherDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -196,10 +196,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(844, 131);
             this.dataGridView1.TabIndex = 0;
             // 
-            // bindingSource1
-            // 
-            this.bindingSource1.DataSource = typeof(HelloCSharp07.Book);
-            // 
             // isbnDataGridViewTextBoxColumn
             // 
             this.isbnDataGridViewTextBoxColumn.DataPropertyName = "isbn";
@@ -224,6 +220,10 @@
             this.pageDataGridViewTextBoxColumn.HeaderText = "page";
             this.pageDataGridViewTextBoxColumn.Name = "pageDataGridViewTextBoxColumn";
             // 
+            // bindingSource1
+            // 
+            this.bindingSource1.DataSource = typeof(HelloCSharp07.Book);
+            // 
             // LibraryManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -232,6 +232,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "LibraryManager";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "도서관리";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
