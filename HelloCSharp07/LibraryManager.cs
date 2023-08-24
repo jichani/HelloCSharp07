@@ -86,7 +86,7 @@ namespace HelloCSharp07
         }
 
         // 책 삭제 button_delete
-        private void button3_Click(object sender, EventArgs e)d
+        private void button3_Click(object sender, EventArgs e)
         {
 
         }
