@@ -12,10 +12,40 @@ namespace HelloCSharp07
 {
     public partial class BookManager : Form
     {
+        // 콜백 함수
+        private bool checkIsBorrowed(Book b)
+        {
+            return b.isBorrowed;
+        }
         public BookManager()
         {
             InitializeComponent();
             label1.Text = DateTime.Now.ToString("yyyy년 MM월 dd일 HH시 mm분 ss초");
+            label2.Text = "전체 도서 수 : " + DataManager.Books.Count;
+            label3.Text = "전체 회원 수 : " + DataManager.Users.Count;
+
+            // 람다를 이용(책)
+
+            // 대출 중인 도서의 수 = 메소드
+            // Where = Books 안에서 필터링 역할을 한다. checkIsBorrowed를 Books 안에 있는 Book들
+            // 하나하나에 대해서 호출하고 그 결과가 true인 것만 남긴다. .Count는 true의 개수를 센다.
+            label4.Text = "대출 중인 도서의 수 : " + DataManager.Books.Where(checkIsBorrowed).Count();
+
+            // 연체 중인 도서의 수 = 무명 델리게이트 이용
+            // 빌리고 나서 7일 이상이 경과되면 연체로 간주한다.
+            label5.Text = "연체 중인 도서의 수 : " + DataManager.Books.Where(
+                delegate(Book x)
+                {
+                    return x.isBorrowed && x.BorrowedAt.AddDays(7) < DateTime.Now;
+                }
+                ).Count();
+
+            dataGridView1.DataSource = null;
+            dataGridView2.DataSource = null;
+            if (DataManager.Books.Count > 0)
+                dataGridView1.DataSource = DataManager.Books;
+            if (DataManager.Users.Count > 0)
+                dataGridView2.DataSource = DataManager.Users;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)

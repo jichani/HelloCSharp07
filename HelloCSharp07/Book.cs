@@ -11,7 +11,7 @@ namespace HelloCSharp07
         public string isbn { get; set; }
         public string name { get; set; }
         public string publisher { get; set; }
-        public string page { get; set; }
+        public int page { get; set; }
         public string userld { get; set; }
         public string userName { get; set; }
         public bool isBorrowed { get; set; }
