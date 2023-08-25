@@ -46,6 +46,26 @@ namespace HelloCSharp07
                 dataGridView1.DataSource = DataManager.Books;
             if (DataManager.Users.Count > 0)
                 dataGridView2.DataSource = DataManager.Users;
+
+            dataGridView1.CellClick += dCellClick;
+
+            DataGridViewCellEventHandler dCellClick2 = dgClick;
+            dataGridView2.CellClick += dCellClick2;
+        }
+
+        private void dgClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView thisGridView = sender as DataGridView;
+            User u = thisGridView.CurrentRow.DataBoundItem as User;
+            textBox3.Text = u.id;
+        }
+
+        private void dCellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+            Book book = dataGridView1.CurrentRow.DataBoundItem as Book;
+            textBox1.Text = book.isbn;
+            textBox2.Text = book.name;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -92,6 +112,98 @@ namespace HelloCSharp07
             dataGridView2.DataSource = null;
             if (DataManager.Users.Count > 0)
                 dataGridView2.DataSource= DataManager.Users;
+        }
+
+        // 대여
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // 양쪽 공백 다 지웠을 때 아무것도 없다면
+            if (textBox1.Text.Trim() == "")
+                MessageBox.Show("isbn이 없음");
+            else if (textBox3.Text.Trim() == "")
+                MessageBox.Show("사용자 id 없음");
+            else
+            {
+                try
+                {
+                    Book b = DataManager.Books.Single(x => x.isbn == textBox1.Text);
+                    if (b.isBorrowed)
+                        MessageBox.Show("이미 대여된 책입니다.");
+                    else
+                    {
+                        User u = DataManager.Users.Single(x => x.id == textBox3.Text);
+                        b.userld = u.id;
+                        b.userName = u.이름;
+                        b.isBorrowed = true;
+                        b.BorrowedAt = DateTime.Now;
+
+                        dataGridView1.DataSource = null;
+                        dataGridView1.DataSource = DataManager.Books;
+
+                        label4.Text = "대출 중인 도서의 수 : " + DataManager.Books.Where(checkIsBorrowed).Count();
+
+                        DataManager.Save();
+                        MessageBox.Show($"{b.name} 책이 {u.이름}님에게 대여됨 ");
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("isbn이 없습니다.");
+                }
+            }
+        }
+
+        // 반납
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text.Trim() == "")
+                MessageBox.Show("isbn 입력하세요");
+            else
+            {
+                try
+                {
+                    Book b = DataManager.Books.Single(x => x.isbn == textBox1.Text);
+                    if(b.isBorrowed)
+                    {
+                        // 빌린 사람 없다는 뜻
+                        b.userld = "";
+                        b.userName = "";
+                        b.isBorrowed = false;
+
+                        DateTime oldDay = b.BorrowedAt;
+
+                        // 날짜 초기화
+                        b.BorrowedAt = new DateTime();
+
+                        TimeSpan timeDiff = DateTime.Now - oldDay;
+
+                        DataManager.Save();
+                        dataGridView1.DataSource = null;
+                        dataGridView1.DataSource = DataManager.Books;
+
+                        if (timeDiff.Days > 7)
+                            MessageBox.Show(b.name + "연체 반납");
+                        else
+                            MessageBox.Show(b.name + "정상 반납");
+                            label4.Text = "대출 중인 도서의 수 : " + DataManager.Books.Where(checkIsBorrowed).Count();
+
+                            label5.Text = "연체 중인 도서의 수 : " + DataManager.Books.Where(
+                                delegate (Book x)
+                                {
+                                    return x.isBorrowed && x.BorrowedAt.AddDays(7) < DateTime.Now;
+                                }
+                                ).Count();
+                    }
+                    else
+                    {
+                        MessageBox.Show("아직 안 빌린 책입니다");
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("존재하지 않는 책입니다.");
+                }
+            }
         }
     }
 }

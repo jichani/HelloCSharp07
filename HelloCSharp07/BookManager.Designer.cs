@@ -210,6 +210,7 @@
             this.button2.TabIndex = 10;
             this.button2.Text = "반납";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // textBox2
             // 
@@ -235,6 +236,7 @@
             this.button1.TabIndex = 7;
             this.button1.Text = "대여";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // textBox1
             // 
