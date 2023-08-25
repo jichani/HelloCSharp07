@@ -63,21 +63,35 @@ namespace HelloCSharp07
             label1.Text = DateTime.Now.ToString("yyyy년 MM월 dd일 HH시 mm분 ss초");
         }
 
-        private void 사용자관리ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 도서관리ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // ShowDialog : 모달
             // 뒤에꺼 클릭 안 되고 코드가 여기서 멈춰있다.
-            new UserManager().ShowDialog();
-        }
-
-        private void 도서관리ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
             new LibraryManager().ShowDialog();
+            dataGridView1.DataSource = null;
+            if (DataManager.Books.Count > 0)
+            {
+                dataGridView1.DataSource = DataManager.Books;
+            }
+            label2.Text = "전체 도서 수 : " + DataManager.Books.Count;
+
+            label4.Text = "대출 중인 도서의 수 : " + DataManager.Books.Where(checkIsBorrowed).Count();
+
+            label5.Text = "연체 중인 도서의 수 : " + DataManager.Books.Where(
+                delegate (Book x)
+                {
+                    return x.isBorrowed && x.BorrowedAt.AddDays(7) < DateTime.Now;
+                }
+                ).Count();
         }
 
-        private void label6_Click(object sender, EventArgs e)
+        private void 사용자관리ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            new UserManager().ShowDialog();
+            label3.Text = "전체 회원 수 : " + DataManager.Users.Count;
+            dataGridView2.DataSource = null;
+            if (DataManager.Users.Count > 0)
+                dataGridView2.DataSource= DataManager.Users;
         }
     }
 }

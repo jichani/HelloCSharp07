@@ -135,5 +135,14 @@ namespace HelloCSharp07
                 MessageBox.Show("없는 책 입니다.");
             }
         }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Book b = dataGridView1.CurrentRow.DataBoundItem as Book;
+            textBox1.Text = b.isbn;
+            textBox2.Text = b.name;
+            textBox3.Text = b.publisher;
+            textBox4.Text = b.page.ToString();
+        }
     }
 }
