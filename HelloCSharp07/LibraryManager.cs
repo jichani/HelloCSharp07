@@ -82,13 +82,58 @@ namespace HelloCSharp07
         // 책 수정 button_edit
         private void button2_Click(object sender, EventArgs e)
         {
-
+            Book b = null;
+            for (int i = 0; i< DataManager.Books.Count; i++)
+            {
+                if (DataManager.Books[i].isbn == textBox1.Text)
+                {
+                    b = DataManager.Books[i];
+                    b.name = textBox2.Text;
+                    b.publisher = textBox3.Text;
+                    int.TryParse(textBox4.Text, out int page);
+                    b.page = page;
+                    if(page<=0)
+                    {
+                        MessageBox.Show("페이지 값이 잘못되었습니다.");
+                        return;
+                    }
+                    dataGridView1.DataSource= null;
+                    dataGridView1.DataSource = DataManager.Books;
+                    DataManager.Save();
+                }
+            }
+            if(b== null)
+            {
+                MessageBox.Show("없는 책입니다.");
+            }
         }
 
         // 책 삭제 button_delete
         private void button3_Click(object sender, EventArgs e)
         {
-
+            bool existBook = false;
+            for(int i = 0; i < DataManager.Books.Count;i++)
+            {
+                if (DataManager.Books[i].isbn == textBox1.Text)
+                {
+                    // DataManager.Books.Remove(DataManager.Books[i]);
+                    DataManager.Books.RemoveAt(i);
+                    existBook = true;
+                }
+            }
+            if(existBook)
+            {
+                dataGridView1.DataSource = null;
+                if(DataManager.Books.Count > 0)
+                {
+                    dataGridView1.DataSource = DataManager.Books;
+                }
+                DataManager.Save();
+            }
+            else
+            {
+                MessageBox.Show("없는 책 입니다.");
+            }
         }
     }
 }
